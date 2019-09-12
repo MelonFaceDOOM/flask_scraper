@@ -1,0 +1,13 @@
+*.pyc
+
+*.pyo
+
+.env
+
+venv/
+
+logs/
+
+__pycache__/
+
+.idea/

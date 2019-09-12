@@ -1,0 +1,1 @@
+Scraper run through celery, with celery beat, hosted on a Flask app

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<h1>Scrapers</h1>
+<div>
+    Redis server running: {{ redis_running }}
+</div>
+<table class="table table-condensed" id="Scrapers">
+    <tr>
+        <th>Task Name</th>
+        <th>Currently Running</th>
+    </tr>
+    {% for scraper_name, scraper_func in scrapers.items() %}
+    <tr>
+        <td id="{{ scraper_name }}">
+            <a href="{{ url_for('scraping.{}'.format(scraper_name)) }}">{{ scraper_name }}</a>
+        </td>
+        <td>N/A</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

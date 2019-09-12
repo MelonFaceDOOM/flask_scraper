@@ -1,0 +1,29 @@
+#progress {
+    width: 100%;
+    text-align: center;
+}
+
+#status {
+    width: 100%;
+    text-align: left;
+    font-family: "Courier New";
+}
+
+#countdowntimer {
+    font-size: 2.5em;
+    display: inline;
+}
+
+#next_url {
+    display: inline;
+}
+
+#successes {
+    color: rgb(60, 179, 113);
+    display: inline;
+}
+
+#failures {
+    color: rgb(255, 99, 71);
+    display: inline;
+}
