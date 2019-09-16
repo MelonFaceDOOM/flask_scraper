@@ -97,7 +97,7 @@ def create_market():
 @bp.route('/import_rechem', methods=['GET'])
 @login_required
 def import_rechem():
-    con = sqlite3.connect('rechem_listings.db')
+    con = sqlite3.connect('app/rechem_listings.db')
     con.row_factory = sqlite3.Row  # returns sqlite3 query result as dict rather than tuple
     c = con.cursor()
     c.execute("SELECT * FROM country")
@@ -167,3 +167,5 @@ def import_rechem():
             print("page already found:")
     db.session.add_all(new_pages)
     db.session.commit()
+
+    return "", 204

@@ -15,8 +15,6 @@
             {% if current_user.is_authenticated %}
             <input type="button" value="rename" class="rename_market" market_id="{{ market.id }}"/>
             <input type="button" value="delete" class="delete_market" market_id="{{ market.id }}"/>
-            <a href="{{ url_for('scraping.create_mock_data', market_id=market.id) }}" class="button">add mock data</a>
-            <a href="{{ url_for('scraping.create_mock_listings', market_id=market.id) }}" class="button">add mock listings</a>
             {% endif %}
         </td>
 

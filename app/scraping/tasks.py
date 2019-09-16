@@ -45,24 +45,25 @@ def rechem_single_page(self):
 
 
 @celery.task(bind=True)
-def test_task(self):
+def test(self):
 
     self.update_state(state='PENDING',
                       meta={'status': "Beginning loop"})
-    total = 20
-    for i in range(total):
+    markets = Market.query.all()
+
+    for i in range(len(markets)+1, len(markets)+11):
         logging.info("on loop {}".format(i+1))
-        status = "Working through task {} of {}".format(i + 1, total)
-        db.session.add(Page(listing_id=1, html="test"))
+        status = "Working through task {} of {}".format(i + 1, 10)
+        db.session.add(Market(name="test"+str(i)))
         db.session.commit()
         sleeptime = 4
         for remaining in range(sleeptime, 0, -1):
             self.update_state(state='PROGRESS',
-                              meta={'current': i + 1, 'total': total, 'successes': i + 1,
+                              meta={'current': i, 'total': 10, 'successes': i,
                                     'failures': 0, 'sleeptime': remaining, 'status': status})
             sleep(1)
 
     self.update_state(state='SUCCESS')
-    return {'current': total, 'total': total, 'successes': 5, 'failures': 0,
+    return {'current': 10, 'total': 10, 'successes': 5, 'failures': 0,
             'status': 'Completed'}
 
