@@ -25,19 +25,17 @@ def rechem_single_page(self):
     }
     session = requests.session()
     session.headers = headers
-    rechem = Market.query.filter_by(name="rechem_real").first()
-    last_updated_listing = rechem.latest_page_for_each_listing()[0].listing
-    url = last_updated_listing.url
-
-    self.update_state(state='PROGRESS',
-                      meta={'url': url, 'status': "Attempting to scrape {}".format(url)})
+    rechem = Market.query.filter_by(name="Rechem").first()
+    # find the least-updated listing
+    listing = rechem.latest_page_for_each_listing()[0].listing
+    url = listing.url
 
     content = rget(url, session)  # note that automatic retries are part of rget
     if content is None:
         self.update_state(state='FAILURE')
         return {'url': url, 'status': "Unable to reach {}".format(url)}
     else:
-        db.session.add(Page(listing_id=last_updated_listing.id, html=content.text))
+        db.session.add(Page(listing_id=listing.id, html=content.text))
         db.session.commit()
 
         self.update_state(state='SUCCESS')
