@@ -30,7 +30,7 @@ class Config(object):
     CELERYBEAT_SCHEDULE = {
         'test-celery': {
             'task': 'app.scraping.tasks.rechem_single_page',
-            # Every 10 minutes
+            # Every 10 minutes would be "*/10"
             # see scheduling examples here:
             # http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#entries
             'schedule': crontab(minute="*/10"),

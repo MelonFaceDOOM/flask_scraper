@@ -32,6 +32,12 @@ def rechem_single_page(self):
 
     content = rget(url, session)  # note that automatic retries are part of rget
     if content is None:
+        # since the least updated listing is selected at the start of this program, it is important
+        # to still enter a page even when the page is unreachable. Otherwise, a page that no longer
+        # exists on the website will just become stuck in an infinite loop
+        db.session.add(Page(listing_id=listing.id, html="failed to reach page"))
+        db.session.commit()
+        
         self.update_state(state='FAILURE')
         return {'url': url, 'status': "Unable to reach {}".format(url)}
     else:
@@ -64,4 +70,3 @@ def test(self):
     self.update_state(state='SUCCESS')
     return {'current': 10, 'total': 10, 'successes': 5, 'failures': 0,
             'status': 'Completed'}
-

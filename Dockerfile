@@ -18,7 +18,7 @@ RUN apk add g++ libxslt-dev
 # RUN apk add libxml2-dev libxslt1-dev
 
 RUN python -m venv venv
-RUN pip install --upgrade pip
+RUN venv/bin/pip install --upgrade pip
 RUN venv/bin/pip install -r requirements.txt
 RUN venv/bin/pip install gunicorn pymysql
 
@@ -29,8 +29,8 @@ RUN chmod +x boot.sh
 
 ENV FLASK_APP fs.py
 
-RUN chown -R dnms:dnms ./
-USER dnms
+RUN chown -R fs:fs ./
+USER fs
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
