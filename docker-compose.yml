@@ -25,7 +25,8 @@ services:
     ports:
       - 6379:6379
     restart: always
-      - redis_data:
+    volumes:
+      - redis_data:/data
 
   web:
     image: melonfacedoom/flask_scraper:latest
