@@ -2,6 +2,8 @@ import chardet
 from random import randint
 from time import sleep
 import logging
+from lxml import html
+import re
 
 
 def is_gibberish(content_bytes):
@@ -27,3 +29,4 @@ def rget(url, session):
         else:
             logging.info("Success after {} retries at {}".format(retries, url))
             return content
+

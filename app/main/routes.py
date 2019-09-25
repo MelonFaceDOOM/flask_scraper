@@ -7,6 +7,8 @@ from app.main.forms import EditProfileForm
 from datetime import datetime
 import sqlite3
 import os
+import re
+from lxml import html
 
 
 @bp.route('/favicon.ico')
@@ -168,4 +170,28 @@ def import_rechem():
     db.session.add_all(new_pages)
     db.session.commit()
 
+    return "", 204
+
+@bp.route('/update_rechem')
+@login_required
+def update_rechem():
+    rechem = Market.query.filter_by(name="Rechem").first()
+    rechem_pages = rechem.pages()
+
+    for page in rechem_pages:
+        tree = html.fromstring(page.html)
+        name = tree.xpath('//h1')
+        if name:
+            name = name[0].text
+        price = tree.xpath('//h2')
+        if price:
+            price = price[0].text
+            if price:
+                price = re.sub(r"[^\d\.]", "", price)
+                price = float(price)
+        else:
+            price=None
+        page.name = name
+        page.price = price
+        db.session.commit()
     return "", 204

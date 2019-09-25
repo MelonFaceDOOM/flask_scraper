@@ -6,6 +6,9 @@ import jwt
 from app import db, login
 from sqlalchemy.orm import validates
 import datetime
+from sqlalchemy.event import listens_for
+import re
+from lxml import html
 
 
 class User(UserMixin, db.Model):
@@ -143,3 +146,22 @@ class Page(db.Model):
     html = db.Column(db.TEXT(collation='utf8mb4_unicode_ci'))
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+
+
+@listens_for(Page, 'before_insert')
+def rechem_parse(mapper, configuration, target):
+    tree = html.fromstring(page.html)
+    name = tree.xpath('//h1')
+    if name:
+        name = name[0].text
+    price = tree.xpath('//h2')
+    if price:
+        price = price[0].text
+        if price:
+            price = re.sub(r"[^\d\.]", "", price)
+            price = float(price)
+    else:
+        price=None
+    target.name = name
+    target.price = price
+
