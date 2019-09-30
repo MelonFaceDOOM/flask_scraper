@@ -8,6 +8,8 @@ from sqlalchemy.orm import validates
 import datetime
 from sqlalchemy.event import listens_for
 import re
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import func
 from lxml import html
 
 
@@ -136,8 +138,6 @@ class Listing(db.Model):
     def newest_page(self):
         return Page.query.filter_by(listing_id=self.id).order_by(Page.timestamp.desc()).first()
 
-    # TODO: add price function which returns the price from the latest page
-
 
 class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -150,7 +150,7 @@ class Page(db.Model):
 
 @listens_for(Page, 'before_insert')
 def rechem_parse(mapper, configuration, target):
-    tree = html.fromstring(page.html)
+    tree = html.fromstring(target.html)
     name = tree.xpath('//h1')
     if name:
         name = name[0].text

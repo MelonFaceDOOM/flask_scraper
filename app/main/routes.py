@@ -195,3 +195,25 @@ def update_rechem():
         page.price = price
         db.session.commit()
     return "", 204
+
+
+@bp.route('/view_market/<market_id>')
+@login_required
+def view_market(market_id):
+    market = Market.query.filter_by(id=market_id).first()
+    if not market:
+        flash("market with id {} not found".format(market_id))
+        return redirect(url_for('main.index'))
+    page = request.args.get('page', 1, type=int)
+    listings = market.listings.join(Page, Listing.pages).order_by(Page.timestamp.desc()).paginate(
+        page, 20, False)
+    return render_template('view_market.html', listings=listings.items)
+
+@bp.route('/view_listing/<listing_id>')
+@login_required
+def view_listing(listing_id):
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if not listing:
+        flash("listing with id {} not found".format(listing_id))
+        return redirect('main.index')
+    return render_template('view_listing.html', listing=listing, pages=listing.pages)

@@ -8,7 +8,11 @@
     </tr>
     {% for market in markets %}
     <tr>
-        <td id="market_name{{ market.id }}">{{ market.name }}</td>
+        <td id="market_name{{ market.id }}">
+            <a href="{{ url_for('main.view_market', market_id=market.id) }}">
+                {{ market.name }}
+            </a>
+        </td>
         <td id="listing_count{{ market.id }}">{{ market.listings.count() }}</td>
         <td id="data_points{{ market.id }}">{{ market.pages().count() }}</td>
         <td>
